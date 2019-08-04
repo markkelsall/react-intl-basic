@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { IntlProvider, FormattedMessage, FormattedNumber, addLocaleData} from 'react-intl';
 import './App.css';
 
 function App() {
+  const locale = 'de';
+  const [localeDataLoaded, setLoacleDataLoaded] = useState(null);
+
+  let translations = {
+    "key1": "Hello {name}, you have {count, number} messages"
+  };
+
+  useEffect(() => {
+    addLocaleData(require(`react-intl/locale-data/${locale}`));
+    setLoacleDataLoaded(true);
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    localeDataLoaded ? 
+    <IntlProvider locale={locale} messages={translations}>
+      <div className="App">
+        <header className="App-header">
+          <FormattedMessage id={"key1"} values={{name: 'Fred', count: 1000}}/>
+          <FormattedNumber style="currency" currency="EUR" value="1000.99" />
+        </header>
+      </div> 
+    </IntlProvider> : null
   );
 }
 
