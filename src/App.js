@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { IntlProvider, FormattedMessage, FormattedNumber, addLocaleData} from 'react-intl';
 import './App.css';
 
-function App() {
-  const locale = 'de';
-  const [localeDataLoaded, setLoacleDataLoaded] = useState(null);
+let locale = new URLSearchParams(window.location.search).get('lang');
 
+function App() {
+  
+  const [localeDataLoaded, setLocaleDataLoaded] = useState(null);
+  
   let translations = {
     "key1": "Hello {name}, you have {count, number} messages"
   };
 
   useEffect(() => {
-    addLocaleData(require(`react-intl/locale-data/${locale}`));
-    setLoacleDataLoaded(true);
+    import(`react-intl/locale-data/${locale}`).then(localeData => {
+      addLocaleData(localeData.default);
+      setLocaleDataLoaded(true);
+    });
   }, []);
 
   return (
