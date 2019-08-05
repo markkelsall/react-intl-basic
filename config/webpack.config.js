@@ -478,6 +478,7 @@ module.exports = function(webpackEnv) {
     },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
+      new webpack.IgnorePlugin(/react-intl[/\\]locale-data$/),
       new BundleAnalyzerPlugin(),
       new HtmlWebpackPlugin(
         Object.assign(
